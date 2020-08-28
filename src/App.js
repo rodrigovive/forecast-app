@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import InputSearch from "./components/InputSearch"
+import {
+  fetchForecastByCity,
+  ForecastProvider,
+  useForecastDispatch,
+  useForecastState,
+} from "./context/forecast"
+import {
+  useCitiesDispatch,
+  SearchedCitiesProvider,
+  UPDATE_SEARCHED_CITIES,
+} from "./context/searchedCities"
+import ListSearchCities from "./components/ListSearchedCities"
 
 function App() {
+  const dispatchForecast = useForecastDispatch()
+  const stateForecast = useForecastState()
+  const dispatchSearchedCities = useCitiesDispatch()
+
+  const handleSubmitSearch = async (values) => {
+    await fetchForecastByCity(dispatchForecast, values.input)
+    dispatchSearchedCities({
+      type: UPDATE_SEARCHED_CITIES,
+      payload: values.input,
+    })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <main>
+        <h1>Forecast App</h1>
+        <InputSearch handleSubmitSearch={handleSubmitSearch} />
+        <ListSearchCities />
+
+        <pre>
+          <code>{JSON.stringify(stateForecast, null, 4)}</code>
+        </pre>
+      </main>
     </div>
-  );
+  )
 }
 
-export default App;
+const AppWrapper = () => {
+  return (
+    <ForecastProvider>
+      <SearchedCitiesProvider>
+        <App />
+      </SearchedCitiesProvider>
+    </ForecastProvider>
+  )
+}
+
+export default AppWrapper
