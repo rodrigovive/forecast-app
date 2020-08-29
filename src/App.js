@@ -1,92 +1,17 @@
 import React from "react"
-import InputSearch from "./components/InputSearch"
-import {
-  fetchForecastByCity,
-  ForecastProvider,
-  useForecastDispatch,
-  useForecastState,
-} from "./context/forecast"
-import {
-  useCitiesDispatch,
-  SearchedCitiesProvider,
-} from "./context/searchedCities"
-import ListSearchCities from "./components/ListSearchedCities"
-import Map from "./components/Map"
+import { ForecastProvider } from "./context/forecast"
+import { SearchedCitiesProvider } from "./context/searchedCities"
+import Main from "./pages/Main"
+import "./assets/main.css"
 
-function App() {
-  const dispatchForecast = useForecastDispatch()
-  const stateForecast = useForecastState()
-  const dispatchSearchedCities = useCitiesDispatch()
-
-  const [input, setInput] = React.useState("")
-  const [loading, setLoading] = React.useState(false)
-
-  const searchForecast = async (value = input) => {
-    setLoading(true)
-    await fetchForecastByCity({
-      dispatchForecast,
-      dispatchSearchedCities,
-      value,
-      stateForecast,
-    })
-    setLoading(false)
-  }
-
-  const handleSubmitSearch = async (e) => {
-    e.preventDefault()
-    searchForecast(input)
-  }
-
-  const handleChangeInputSearch = (e) => {
-    setInput(e.target.value)
-  }
-
-  const handleClickSearchedCity = (e) => {
-    e.preventDefault()
-    const {
-      currentTarget: {
-        dataset: { name },
-      },
-    } = e
-    setInput(name)
-    searchForecast(name)
-  }
-
-  return (
-    <div className="App">
-      <main>
-        <h1>Forecast App</h1>
-        <InputSearch
-          disabledSubmit={loading}
-          handleSubmit={handleSubmitSearch}
-          valueSearch={input}
-          handleChangeInputSearch={handleChangeInputSearch}
-        />
-
-        <ListSearchCities handleClick={handleClickSearchedCity} />
-        {loading ? (
-          "loading"
-        ) : (
-          <>
-            <pre>
-              <code>{JSON.stringify(stateForecast.current, null, 4)}</code>
-            </pre>
-            <Map />
-          </>
-        )}
-      </main>
-    </div>
-  )
-}
-
-const AppWrapper = () => {
+const App = () => {
   return (
     <ForecastProvider>
       <SearchedCitiesProvider>
-        <App />
+        <Main />
       </SearchedCitiesProvider>
     </ForecastProvider>
   )
 }
 
-export default AppWrapper
+export default App

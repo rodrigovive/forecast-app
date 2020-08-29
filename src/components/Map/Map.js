@@ -1,18 +1,16 @@
 import React from "react"
 import PropTypes from "prop-types"
 import GoogleMapReact from "google-map-react"
-import { useForecastState } from "../../context/forecast"
 
 const ZOOM = 11
 
-const Map = ({ zoom }) => {
-  const { current: stateForecast } = useForecastState()
+const Map = ({ zoom, lng, lat }) => {
   const center = {
-    lat: stateForecast.coord.lat,
-    lng: stateForecast.coord.lon,
+    lat,
+    lng,
   }
   return (
-    <div style={{ height: "300px", width: "300px" }}>
+    <div className="w-64 h-64 mt-4">
       <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_KEY }}
         center={center}
@@ -24,10 +22,14 @@ const Map = ({ zoom }) => {
 
 Map.defaultProps = {
   zoom: ZOOM,
+  lng: 0,
+  lat: 0,
 }
 
 Map.propTypes = {
   zoom: PropTypes.number,
+  lng: PropTypes.number,
+  lat: PropTypes.number,
 }
 
 export default Map

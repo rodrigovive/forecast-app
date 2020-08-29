@@ -25,16 +25,19 @@ const ListSearchCities = ({ handleClick }) => {
   }
 
   return (
-    <ul>
-      {stateSearchCities.map((name) => (
-        <Item
-          key={name}
-          name={name}
-          handleClickSearch={handleClick}
-          handleClickRemove={handleClickRemoveCity}
-        />
-      ))}
-    </ul>
+    <div className="w-full px-4 mt-4">
+      <p className="font-semibold text-md">Searched cities:</p>
+      <ul className="mt-2">
+        {stateSearchCities.map((name) => (
+          <Item
+            key={name}
+            name={name}
+            handleClickSearch={handleClick}
+            handleClickRemove={handleClickRemoveCity}
+          />
+        ))}
+      </ul>
+    </div>
   )
 }
 

@@ -17,6 +17,7 @@
       "error", {
         "semi": false
       }
-    ]
+    ],
+    "global-require": 0  
   }
 }
