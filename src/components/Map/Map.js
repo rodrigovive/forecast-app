@@ -6,7 +6,7 @@ import { useForecastState } from "../../context/forecast"
 const ZOOM = 11
 
 const Map = ({ zoom }) => {
-  const stateForecast = useForecastState()
+  const { current: stateForecast } = useForecastState()
   const center = {
     lat: stateForecast.coord.lat,
     lng: stateForecast.coord.lon,

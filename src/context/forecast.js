@@ -5,7 +5,7 @@ import { UPDATE_SEARCHED_CITIES } from "./searchedCities"
 const UPDATE_FORECAST = "UPDATE_FORECAST"
 const NOT_FOUND = "NOT_FOUND"
 
-const initialState = {
+const initialStateForecast = {
   main: {
     feels_like: undefined,
     humidity: undefined,
@@ -20,6 +20,12 @@ const initialState = {
   },
   name: undefined,
   error: undefined,
+  city: undefined,
+}
+
+const initialState = {
+  data: {},
+  current: initialStateForecast,
 }
 
 const ForecastStateContext = React.createContext()
@@ -44,17 +50,26 @@ const useForecastDispatch = () => {
 const forecastReducer = (prev, action) => {
   switch (action.type) {
     case UPDATE_FORECAST: {
+      const { city } = action.payload
       return {
-        ...prev,
-        ...action.payload,
-        error: undefined,
+        data: {
+          ...prev.data,
+          [city]: { ...action.payload },
+        },
+        current: {
+          ...action.payload,
+          error: undefined,
+        },
       }
     }
     case NOT_FOUND: {
       return {
-        ...initialState,
-        name: action.payload,
-        error: "not found",
+        ...prev,
+        current: {
+          ...initialStateForecast,
+          name: action.payload,
+          error: "not found",
+        },
       }
     }
     default:
@@ -78,16 +93,27 @@ ForecastProvider.propTypes = {
   children: PropTypes.element.isRequired,
 }
 
-async function fetchForecastByCity(
+const sanitizationInput = (value) => value.trim()
+
+async function fetchForecastByCity({
   dispatchForecast,
   dispatchSearchedCities,
-  city = ""
-) {
+  value = "",
+  stateForecast,
+}) {
   try {
-    dispatchSearchedCities({
-      type: UPDATE_SEARCHED_CITIES,
-      payload: city,
-    })
+    const city = sanitizationInput(value)
+    const currentForecastData = stateForecast.data[city]
+    if (currentForecastData) {
+      return dispatchForecast({
+        type: UPDATE_FORECAST,
+        payload: {
+          ...currentForecastData,
+          city,
+        },
+      })
+    }
+
     const { cod, main, name, coord } = await (
       await fetch(
         `${process.env.REACT_APP_OPEN_WEATHER_MAP}?q=${city}&appid=${process.env.REACT_APP_OPEN_WEATHER_APP_ID}`
@@ -100,16 +126,20 @@ async function fetchForecastByCity(
           main,
           name,
           coord,
+          city,
         },
       })
-    } else {
-      dispatchForecast({
-        type: NOT_FOUND,
+      return dispatchSearchedCities({
+        type: UPDATE_SEARCHED_CITIES,
         payload: city,
       })
     }
+    return dispatchForecast({
+      type: NOT_FOUND,
+      payload: city,
+    })
   } catch (e) {
-    console.error("fetch erro", e.message)
+    return e.message
   }
 }
 

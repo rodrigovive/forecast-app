@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 
 const UPDATE_SEARCHED_CITIES = "UPDATE_SEARCHED_CITIES"
+const DELETE_SEARCHED_CITY = "DELETE_SEARCHED_CITY"
 
 const LOCAL_STORAGE_SEARCHED_CITIES = "LOCAL_STORAGE_SEARCHED_CITIES"
 
@@ -40,6 +41,10 @@ const filterSearched = (data = [], max = 5) => {
   return data.slice(indexValue)
 }
 
+const removeSearch = (data = [], remove = "") => {
+  return data.filter((name) => name !== remove)
+}
+
 const searchedCitiesReducer = (prev, action) => {
   switch (action.type) {
     case UPDATE_SEARCHED_CITIES: {
@@ -49,6 +54,12 @@ const searchedCitiesReducer = (prev, action) => {
       savedLocalSearched(updatedSearched)
       return updatedSearched
     }
+    case DELETE_SEARCHED_CITY: {
+      const newSearched = removeSearch(prev, action.payload)
+      savedLocalSearched(newSearched)
+      return newSearched
+    }
+
     default:
       throw new Error("not defined type")
   }
@@ -76,6 +87,7 @@ SearchedCitiesProvider.defaultProps = {
 
 export {
   UPDATE_SEARCHED_CITIES,
+  DELETE_SEARCHED_CITY,
   useCitiesDispatch,
   useCitiesState,
   SearchedCitiesProvider,

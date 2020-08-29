@@ -19,14 +19,17 @@ function App() {
   const dispatchSearchedCities = useCitiesDispatch()
 
   const [input, setInput] = React.useState("")
+  const [loading, setLoading] = React.useState(false)
 
   const searchForecast = async (value = input) => {
-    const sanitizationInput = value.trim()
-    await fetchForecastByCity(
+    setLoading(true)
+    await fetchForecastByCity({
       dispatchForecast,
       dispatchSearchedCities,
-      sanitizationInput
-    )
+      value,
+      stateForecast,
+    })
+    setLoading(false)
   }
 
   const handleSubmitSearch = async (e) => {
@@ -54,15 +57,23 @@ function App() {
       <main>
         <h1>Forecast App</h1>
         <InputSearch
+          disabledSubmit={loading}
           handleSubmit={handleSubmitSearch}
           valueSearch={input}
           handleChangeInputSearch={handleChangeInputSearch}
         />
+
         <ListSearchCities handleClick={handleClickSearchedCity} />
-        <pre>
-          <code>{JSON.stringify(stateForecast, null, 4)}</code>
-        </pre>
-        <Map />
+        {loading ? (
+          "loading"
+        ) : (
+          <>
+            <pre>
+              <code>{JSON.stringify(stateForecast.current, null, 4)}</code>
+            </pre>
+            <Map />
+          </>
+        )}
       </main>
     </div>
   )

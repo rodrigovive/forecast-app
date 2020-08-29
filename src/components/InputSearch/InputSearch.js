@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 
 const InputSearch = ({
+  disabledSubmit,
   handleSubmit,
   valueSearch,
   handleChangeInputSearch,
@@ -21,7 +22,9 @@ const InputSearch = ({
           />
         </label>
 
-        <button type="submit">Search</button>
+        <button type="submit" disabled={disabledSubmit}>
+          Search
+        </button>
       </form>
     </>
   )
@@ -31,6 +34,7 @@ InputSearch.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleChangeInputSearch: PropTypes.func.isRequired,
   valueSearch: PropTypes.string.isRequired,
+  disabledSubmit: PropTypes.bool.isRequired,
 }
 
 export default InputSearch
