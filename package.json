@@ -3,7 +3,6 @@
   "description": "Search forescast by cities",
   "version": "0.1.0",
   "author": "Jhair Rodrigo Viveros Cordova",
-  "homepage": "https://github.com/rodrigovive/forecast-app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rodrigovive/forecast-app.git"
