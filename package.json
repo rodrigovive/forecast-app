@@ -1,7 +1,13 @@
 {
   "name": "forecast-app",
+  "description": "Search forescast by cities",
   "version": "0.1.0",
-  "private": true,
+  "author": "Jhair Rodrigo Viveros Cordova",
+  "homepage": "https://github.com/rodrigovive/forecast-app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrigovive/forecast-app.git"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^10.4.9",
