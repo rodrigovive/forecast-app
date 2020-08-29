@@ -33,17 +33,20 @@ yarn run start
 yarn run test
 ```
 
+## Features
+
+- All requirements completed
+- Search by the city name
+- Maintain a list with the last 5 searched cities
+- The forecast for a city
+
+## Additional Feature
+
+- All searched cities are cached if doesn’t refresh the page, that mean if you search again the same city the fetch will be fast
+
 ## Author
 
 👤 **Jhair Rodrigo Viveros Cordova**
 
 - Website: https://rodrigoviveros.me/
 - Github: [@rodrigovive](https://github.com/rodrigovive)
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
----
-
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
