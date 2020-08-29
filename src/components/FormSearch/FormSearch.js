@@ -1,22 +1,31 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-const FormSearch = ({
-  disabledSubmit,
-  handleSubmit,
-  valueSearch,
-  handleChangeInputSearch,
-}) => {
+const FormSearch = ({ disabledSubmit, handleSubmit, valueSearch }) => {
+  const [input, setInput] = React.useState(valueSearch)
+  React.useEffect(() => {
+    setInput(valueSearch)
+  }, [valueSearch])
+
+  const handleChangeInputSearch = (e) => {
+    setInput(e.target.value)
+  }
+
+  const handleSubmitForm = (e) => {
+    e.preventDefault()
+    handleSubmit(input)
+  }
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form data-testid="form" onSubmit={handleSubmitForm}>
         <div className="flex w-full">
           <label htmlFor="search" className="w-full text-lg">
             <span className="w-full font-semibold">City name:</span>
             <div className="flex w-full mt-2">
               <input
+                aria-label="search"
                 className="w-full text-lg form-input"
-                value={valueSearch}
+                value={input}
                 onChange={handleChangeInputSearch}
                 type="text"
                 id="search"
@@ -38,11 +47,15 @@ const FormSearch = ({
   )
 }
 
+FormSearch.defaultProps = {
+  disabledSubmit: false,
+  valueSearch: "",
+}
+
 FormSearch.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  handleChangeInputSearch: PropTypes.func.isRequired,
-  valueSearch: PropTypes.string.isRequired,
-  disabledSubmit: PropTypes.bool.isRequired,
+  valueSearch: PropTypes.string,
+  disabledSubmit: PropTypes.bool,
 }
 
 export default FormSearch

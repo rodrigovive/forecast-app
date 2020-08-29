@@ -14,10 +14,10 @@ function Main() {
   const stateForecast = useForecastState()
   const dispatchSearchedCities = useCitiesDispatch()
 
-  const [input, setInput] = React.useState("")
+  const [valueSearch, setValueSearch] = React.useState("")
   const [loading, setLoading] = React.useState(false)
 
-  const searchForecast = async (value = input) => {
+  const searchForecast = async (value = "") => {
     setLoading(true)
     await fetchForecastByCity({
       dispatchForecast,
@@ -28,13 +28,8 @@ function Main() {
     setLoading(false)
   }
 
-  const handleSubmitSearch = async (e) => {
-    e.preventDefault()
+  const handleSubmitSearch = (input) => {
     searchForecast(input)
-  }
-
-  const handleChangeInputSearch = (e) => {
-    setInput(e.target.value)
   }
 
   const handleClickSearchedCity = (e) => {
@@ -44,7 +39,7 @@ function Main() {
         dataset: { name },
       },
     } = e
-    setInput(name)
+    setValueSearch(name)
     searchForecast(name)
   }
 
@@ -57,8 +52,7 @@ function Main() {
         <FormSearch
           disabledSubmit={loading}
           handleSubmit={handleSubmitSearch}
-          valueSearch={input}
-          handleChangeInputSearch={handleChangeInputSearch}
+          valueSearch={valueSearch}
         />
 
         <ListSearchCities handleClick={handleClickSearchedCity} />

@@ -4,7 +4,6 @@ import { UPDATE_SEARCHED_CITIES } from "./searchedCities"
 
 const UPDATE_FORECAST = "UPDATE_FORECAST"
 const NOT_FOUND = "NOT_FOUND"
-
 const initialStateForecast = {
   main: {
     feels_like: undefined,
@@ -77,8 +76,8 @@ const forecastReducer = (prev, action) => {
   }
 }
 
-const ForecastProvider = ({ children }) => {
-  const [state, dispatch] = React.useReducer(forecastReducer, initialState)
+const ForecastProvider = ({ children, initial = initialState }) => {
+  const [state, dispatch] = React.useReducer(forecastReducer, initial)
 
   return (
     <ForecastStateContext.Provider value={state}>
@@ -89,8 +88,13 @@ const ForecastProvider = ({ children }) => {
   )
 }
 
+ForecastProvider.defaultProps = {
+  initial: initialState,
+}
+
 ForecastProvider.propTypes = {
   children: PropTypes.element.isRequired,
+  initial: PropTypes.oneOfType([PropTypes.object]),
 }
 
 const sanitizationInput = (value) => value.trim()
@@ -148,4 +152,5 @@ export {
   useForecastDispatch,
   useForecastState,
   fetchForecastByCity,
+  initialState,
 }

@@ -12,7 +12,9 @@ const Detail = ({
 }) => {
   return (
     <div className="w-full px-4 mt-4 md:w-2/3">
-      <h3 className="text-xl font-bold">Forecast in {name}:</h3>
+      <h3 className="text-xl font-bold">
+        Forecast in <span>{name}</span>:
+      </h3>
       <ItemForecast name="Temperature" value={temperature} />
       <ItemForecast name="Pressure" value={pressure} />
       <ItemForecast name="humidity" value={humidity} />
