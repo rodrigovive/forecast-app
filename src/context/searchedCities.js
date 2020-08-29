@@ -47,7 +47,6 @@ const searchedCitiesReducer = (prev, action) => {
         ...new Set([...prev, action.payload]),
       ])
       savedLocalSearched(updatedSearched)
-      console.log("updatedSearched", updatedSearched)
       return updatedSearched
     }
     default:

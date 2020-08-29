@@ -9,9 +9,9 @@ import {
 import {
   useCitiesDispatch,
   SearchedCitiesProvider,
-  UPDATE_SEARCHED_CITIES,
 } from "./context/searchedCities"
 import ListSearchCities from "./components/ListSearchedCities"
+import Map from "./components/Map"
 
 function App() {
   const dispatchForecast = useForecastDispatch()
@@ -22,11 +22,11 @@ function App() {
 
   const searchForecast = async (value = input) => {
     const sanitizationInput = value.trim()
-    await fetchForecastByCity(dispatchForecast, sanitizationInput)
-    dispatchSearchedCities({
-      type: UPDATE_SEARCHED_CITIES,
-      payload: sanitizationInput,
-    })
+    await fetchForecastByCity(
+      dispatchForecast,
+      dispatchSearchedCities,
+      sanitizationInput
+    )
   }
 
   const handleSubmitSearch = async (e) => {
@@ -62,6 +62,7 @@ function App() {
         <pre>
           <code>{JSON.stringify(stateForecast, null, 4)}</code>
         </pre>
+        <Map />
       </main>
     </div>
   )
