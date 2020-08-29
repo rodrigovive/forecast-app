@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 
 const UPDATE_FORECAST = "UPDATE_FORECAST"
+const NOT_FOUND = "NOT_FOUND"
 
 const initialState = {
   main: {
@@ -42,10 +43,16 @@ const useForecastDispatch = () => {
 const forecastReducer = (prev, action) => {
   switch (action.type) {
     case UPDATE_FORECAST: {
-      console.log("action payload", action.payload)
       return {
         ...prev,
         ...action.payload,
+      }
+    }
+    case NOT_FOUND: {
+      return {
+        ...initialState,
+        name: action.payload,
+        error: "not found",
       }
     }
 
@@ -86,6 +93,11 @@ async function fetchForecastByCity(dispatch, city = "") {
           coord,
           error: undefined,
         },
+      })
+    } else {
+      dispatch({
+        type: NOT_FOUND,
+        payload: city,
       })
     }
   } catch (e) {

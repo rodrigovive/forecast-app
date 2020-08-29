@@ -18,21 +18,47 @@ function App() {
   const stateForecast = useForecastState()
   const dispatchSearchedCities = useCitiesDispatch()
 
-  const handleSubmitSearch = async (values) => {
-    await fetchForecastByCity(dispatchForecast, values.input)
+  const [input, setInput] = React.useState("")
+
+  const searchForecast = async (value = input) => {
+    const sanitizationInput = value.trim()
+    await fetchForecastByCity(dispatchForecast, sanitizationInput)
     dispatchSearchedCities({
       type: UPDATE_SEARCHED_CITIES,
-      payload: values.input,
+      payload: sanitizationInput,
     })
+  }
+
+  const handleSubmitSearch = async (e) => {
+    e.preventDefault()
+    searchForecast(input)
+  }
+
+  const handleChangeInputSearch = (e) => {
+    setInput(e.target.value)
+  }
+
+  const handleClickSearchedCity = (e) => {
+    e.preventDefault()
+    const {
+      currentTarget: {
+        dataset: { name },
+      },
+    } = e
+    setInput(name)
+    searchForecast(name)
   }
 
   return (
     <div className="App">
       <main>
         <h1>Forecast App</h1>
-        <InputSearch handleSubmitSearch={handleSubmitSearch} />
-        <ListSearchCities />
-
+        <InputSearch
+          handleSubmit={handleSubmitSearch}
+          valueSearch={input}
+          handleChangeInputSearch={handleChangeInputSearch}
+        />
+        <ListSearchCities handleClick={handleClickSearchedCity} />
         <pre>
           <code>{JSON.stringify(stateForecast, null, 4)}</code>
         </pre>
